@@ -15,6 +15,7 @@
  */
 'use strict';
 
+const debug = require('debug')('keycloak-connect');
 const URL = require('url');
 const http = require('http');
 const https = require('https');
@@ -520,6 +521,7 @@ const fetch = (manager, handler, options, params) => {
 
     const req = getProtocol(options).request(options, (response) => {
       if (response.statusCode < 200 || response.statusCode > 299) {
+        debug("Non 200 response: %j", response);
         return reject(new Error(response.statusCode + ':' + http.STATUS_CODES[ response.statusCode ]));
       }
       let json = '';
