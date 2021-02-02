@@ -190,7 +190,7 @@ GrantManager.prototype.checkPermissions = function obtainPermissions (authzReque
   var handler = (resolve, reject, json) => {
     try {
       if (authzRequest.response_mode === 'decision' || authzRequest.response_mode === 'permissions') {
-        callback(JSON.parse(json));
+        resolve(JSON.parse(json));
       } else {
         resolve(manager.createGrant(json));
       }
