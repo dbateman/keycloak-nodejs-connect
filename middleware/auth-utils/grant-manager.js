@@ -529,12 +529,9 @@ const fetch = (manager, handler, options, params) => {
     debug("Request data is: %s", data);
 
     const req = getProtocol(options).request(options, (response) => {
-      let json = '';
-      response.on('data', (d) => (json += d.toString()));
 
       if (response.statusCode < 200 || response.statusCode > 299) {
         const result = {
-          body: json,
           response: response
         };
         debug(
@@ -543,6 +540,8 @@ const fetch = (manager, handler, options, params) => {
         return reject(new Error(response.statusCode + ':' + http.STATUS_CODES[ response.statusCode ]));
       }
 
+      let json = '';
+      response.on('data', (d) => (json += d.toString()));
       response.on('end', () => {
         handler(resolve, reject, json);
       });
