@@ -522,18 +522,27 @@ const postOptions = (manager, path) => {
 
 const fetch = (manager, handler, options, params) => {
   return new Promise((resolve, reject) => {
+
     const data = (typeof params === 'string' ? params : querystring.stringify(params));
     options.headers['Content-Length'] = data.length;
 
+    debug("Request data is: %s", data);
+
     const req = getProtocol(options).request(options, (response) => {
+      let json = '';
+      response.on('data', (d) => (json += d.toString()));
+
       if (response.statusCode < 200 || response.statusCode > 299) {
+        const result = {
+          body: json,
+          response: response
+        };
         debug(
-            "Non 200 response: %O", response
+            "Non 200 response: %O", result
         );
         return reject(new Error(response.statusCode + ':' + http.STATUS_CODES[ response.statusCode ]));
       }
-      let json = '';
-      response.on('data', (d) => (json += d.toString()));
+
       response.on('end', () => {
         handler(resolve, reject, json);
       });
