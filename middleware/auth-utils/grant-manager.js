@@ -522,11 +522,7 @@ const fetch = (manager, handler, options, params) => {
     const req = getProtocol(options).request(options, (response) => {
       if (response.statusCode < 200 || response.statusCode > 299) {
         debug(
-            "Non 200 response: %j",
-            {
-              error: response.error,
-              error_description: response.error_description
-            }
+            "Non 200 response: %O", response
         );
         return reject(new Error(response.statusCode + ':' + http.STATUS_CODES[ response.statusCode ]));
       }
