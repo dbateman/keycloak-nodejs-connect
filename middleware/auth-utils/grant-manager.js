@@ -152,7 +152,7 @@ GrantManager.prototype.checkPermissions = function obtainPermissions (authzReque
     // response from keycloak for an otherwise valid request.
     //
     if(!!bearerToken) {
-      params.subject_token = bearerToken;
+      //params.subject_token = bearerToken;
     }
   }
 
