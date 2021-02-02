@@ -147,7 +147,13 @@ GrantManager.prototype.checkPermissions = function obtainPermissions (authzReque
       }
     }
 
-    params.subject_token = bearerToken;
+    //
+    // If there is no bearer token don't pass it on. Doing so will cause a 400
+    // response from keycloak for an otherwise valid request.
+    //
+    if(!!bearerToken) {
+      params.subject_token = bearerToken;
+    }
   }
 
   let permissions = authzRequest.permissions;
